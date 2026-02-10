@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -158,8 +158,8 @@
     .hero-blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(34px);
-      opacity: 0.22;
+      filter: blur(26px);  /* MODIF: plus visible */
+      opacity: 0.35;       /* MODIF: plus visible */
       transform: translate3d(0, 0, 0);
       will-change: transform;
       animation: heroFloat 18s ease-in-out infinite;
@@ -440,7 +440,7 @@
 
     @keyframes heroFloat {
       0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(14px, -18px, 0) scale(1.06); }
+      50% { transform: translate3d(45px, -35px, 0) scale(1.15); } /* MODIF: mouvement + visible */
     }
 
     @media (max-width: 920px) {
@@ -637,7 +637,3 @@
 </script>
 </body>
 </html>
-
-
-
-

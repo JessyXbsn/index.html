@@ -138,16 +138,69 @@
 
     section { padding: 92px 0; }
 
+    /* =========================================================
+       HERO — FOND ANIMÉ (TRÈS VISIBLE) UNIQUEMENT ICI
+       ========================================================= */
     .hero {
       min-height: calc(100vh - 76px);
       display: grid;
       align-items: center;
-      background: radial-gradient(circle at top, #1e1e3a, #0f0f1a 72%);
       position: relative;
       overflow: hidden;
       isolation: isolate;
+
+      /* Fond animé visible */
+      background: linear-gradient(
+        120deg,
+        rgba(127, 92, 255, 0.75),
+        rgba(0, 212, 255, 0.65),
+        rgba(127, 92, 255, 0.75),
+        rgba(0, 212, 255, 0.65)
+      );
+      background-size: 400% 400%;
+      animation: heroGradient 8s ease-in-out infinite;
     }
 
+    /* Une couche sombre par-dessus pour garder le style + lisibilité */
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(30,30,58,0.65), rgba(15,15,26,0.92) 72%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Couche lumineuse animée (vraiment visible) */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -45%;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255,255,255,0.18), transparent 42%),
+        radial-gradient(circle at 75% 70%, rgba(255,255,255,0.14), transparent 45%),
+        radial-gradient(circle at 55% 20%, rgba(127,92,255,0.20), transparent 48%),
+        radial-gradient(circle at 35% 80%, rgba(0,212,255,0.18), transparent 50%);
+      filter: blur(6px);
+      animation: heroLights 6s linear infinite;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes heroGradient {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes heroLights {
+      0%   { transform: translate3d(-2%, -2%, 0) rotate(0deg) scale(1); }
+      50%  { transform: translate3d(2%, 2%, 0) rotate(180deg) scale(1.05); }
+      100% { transform: translate3d(-2%, -2%, 0) rotate(360deg) scale(1); }
+    }
+
+    /* On garde ton hero-bg (structure inchangée), mais il ne sert plus aux blobs */
     .hero-bg {
       position: absolute;
       inset: 0;
@@ -155,48 +208,14 @@
       pointer-events: none;
     }
 
-    .hero-blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(26px);  /* MODIF: plus visible */
-      opacity: 0.35;       /* MODIF: plus visible */
-      transform: translate3d(0, 0, 0);
-      will-change: transform;
-      animation: heroFloat 18s ease-in-out infinite;
-    }
-
-    .hero-blob.one {
-      width: 340px;
-      height: 340px;
-      background: rgba(127, 92, 255, 0.45);
-      top: -90px;
-      left: 8%;
-    }
-
-    .hero-blob.two {
-      width: 300px;
-      height: 300px;
-      background: rgba(0, 212, 255, 0.38);
-      right: 10%;
-      top: 22%;
-      animation-delay: -6s;
-    }
-
-    .hero-blob.three {
-      width: 260px;
-      height: 260px;
-      background: rgba(127, 92, 255, 0.32);
-      right: 26%;
-      bottom: -80px;
-      animation-delay: -12s;
-    }
+    .hero-blob { display: none; } /* on cache les anciens blobs */
 
     .hero .container,
     .hero-grid,
     .hero .reveal,
     .hero .hero-panel {
       position: relative;
-      z-index: 1;
+      z-index: 1; /* contenu AU-DESSUS de l’animation */
     }
 
     .hero-grid {
@@ -224,7 +243,7 @@
     }
 
     .hero p {
-      color: var(--text-muted);
+      color: #d8d8f1; /* un poil plus clair pour lisibilité sur fond animé */
       max-width: 640px;
       margin-bottom: 28px;
     }
@@ -243,22 +262,24 @@
     }
 
     .proof-item {
-      background: var(--bg-light);
+      background: rgba(23,23,44,0.90);
       border: 1px solid rgba(255,255,255,0.07);
       border-radius: var(--radius);
       padding: 14px;
       text-align: center;
+      backdrop-filter: blur(8px);
     }
 
     .proof-item strong { display: block; font-size: 1.15rem; }
     .proof-item span { color: var(--text-muted); font-size: 0.88rem; }
 
     .hero-panel {
-      background: var(--bg-light);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(23,23,44,0.90);
+      border: 1px solid rgba(255,255,255,0.10);
       border-radius: 18px;
       padding: 28px;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
 
     .hero-panel h2 {
@@ -438,11 +459,6 @@
       50% { transform: translate(34px, -20px) scale(1.08); }
     }
 
-    @keyframes heroFloat {
-      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(45px, -35px, 0) scale(1.15); } /* MODIF: mouvement + visible */
-    }
-
     @media (max-width: 920px) {
       .hero-grid { grid-template-columns: 1fr; }
       .hero-panel { max-width: 640px; }
@@ -479,6 +495,7 @@
       <span class="hero-blob two"></span>
       <span class="hero-blob three"></span>
     </div>
+
     <div class="container hero-grid">
       <div class="reveal">
         <span class="hero-badge">Sites vitrines pour artisans, indépendants et petites entreprises</span>
